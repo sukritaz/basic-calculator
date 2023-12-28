@@ -1,13 +1,11 @@
 const calculator = document.getElementById("calculator");
 calculator.style.width = `${innerWidth / 4}px`;
 calculator.style.height = `${innerWidth / 3}px`;
-let number = [];
-let expression = [];
 let expressionString = "";
 const displayOperationElem = document.getElementById("display-operation");
 
 createNumbers();
-document.getElementById("clear").onclick = handleButtonClick.bind(null,'clear');
+document.getElementById("clear").onclick = handleButtonClick.bind(null, 'clear');
 
 
 function createNumbers() {
@@ -75,7 +73,7 @@ function handleButtonClick(value) {
         expressionString += value;
     }
     else if ('+-/*'.includes(value)) {
-        '+-/*'.includes(expressionString.charAt(expressionString.length-1)) ?
+        '+-/*'.includes(expressionString.charAt(expressionString.length - 1)) ?
             alert("Please enter a number before two consecutive operations.") :
             expressionString += value;
     }
@@ -84,9 +82,47 @@ function handleButtonClick(value) {
         expressionString = expressionString.slice(0, -1);
     }
 
-    else if("clear"===value) {
+    else if ("clear" === value) {
         expressionString = "";
     }
 
+    else if ('=' === value) {
+        evaluateExpression(expressionString);
+    }
+
     displayOperationElem.textContent = expressionString;
+}
+
+function evaluateExpression(expression) {
+    if ('+-*/'.includes(expression.charAt(expression.length - 1))) {
+        alert("Can not evaluate an expression ending with an operation.");
+    }
+    else {
+        const expressionArray = sliceExpression(expression);
+        document.getElementById("display-result").textContent = eval(expression);
+    }
+
+}
+
+function sliceExpression(expression) {
+    let numberStartIndex = 0;
+    let numberEndIndex = 0;
+    let expressionArray = [];
+    for (let i = 0; i < expression.length; i++) {
+
+        if (i === expressionString.length - 1) {
+            numberEndIndex = i + 1;
+            expressionArray.push(parseInt(expression.slice(numberStartIndex, numberEndIndex)));
+        }
+
+        else if ('+-*/'.includes(expression[i])) {
+            numberEndIndex = i;
+            expressionArray.push(parseInt(expression.slice(numberStartIndex, numberEndIndex)));
+            expressionArray.push(expression.charAt(i));
+            numberStartIndex = i + 1;
+        }
+        console.log(expressionArray);
+    }
+
+    return expressionArray;
 }
