@@ -1,6 +1,10 @@
 const calculator = document.getElementById("calculator");
 calculator.style.width = `${innerWidth / 4}px`;
 calculator.style.height = `${innerWidth / 3}px`;
+let number = [];
+let expression = [];
+let expressionString = "";
+const displayOperationElem = document.getElementById("display-operation");
 
 createNumbers();
 
@@ -10,28 +14,28 @@ function createNumbers() {
     rows.forEach((row, index) => {
         switch (index) {
             case 0:
-                appendButtonToRow(row, 'ADD', 'add', 'operation', handleOperationButtonClick);
-                appendButtonToRow(row, 'SUB', 'sub', 'operation', handleOperationButtonClick);
-                appendButtonToRow(row, 'MUL', 'mul', 'operation', handleOperationButtonClick);
-                appendButtonToRow(row, 'DIV', 'div', 'operation', handleOperationButtonClick);
+                appendButtonToRow(row, 'ADD', 'add', 'operation', handleButtonClick.bind(null, '+'));
+                appendButtonToRow(row, 'SUB', 'sub', 'operation', handleButtonClick.bind(null, '-'));
+                appendButtonToRow(row, 'MUL', 'mul', 'operation', handleButtonClick.bind(null, '*'));
+                appendButtonToRow(row, 'DIV', 'div', 'operation', handleButtonClick.bind(null, '/'));
                 break;
             case 1:
-                appendButtonToRow(row, '1', 'num1', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '2', 'num2', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '3', 'num3', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, 'DEL', 'del', 'operation', handleOperationButtonClick);
+                appendButtonToRow(row, '1', 'num1', 'number', handleButtonClick.bind(null, 1));
+                appendButtonToRow(row, '2', 'num2', 'number', handleButtonClick.bind(null, 2));
+                appendButtonToRow(row, '3', 'num3', 'number', handleButtonClick.bind(null, 3));
+                appendButtonToRow(row, 'DEL', 'del', 'operation', handleButtonClick);
                 break;
             case 2:
-                appendButtonToRow(row, '4', 'num4', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '5', 'num5', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '6', 'num6', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '.', 'decimal', 'operation', handleOperationButtonClick);
+                appendButtonToRow(row, '4', 'num4', 'number', handleButtonClick.bind(null, 4));
+                appendButtonToRow(row, '5', 'num5', 'number', handleButtonClick.bind(null, 5));
+                appendButtonToRow(row, '6', 'num6', 'number', handleButtonClick.bind(null, 6));
+                appendButtonToRow(row, '=', 'evaluate', 'operation', handleButtonClick.bind(null, '='));
                 break;
             case 3:
-                appendButtonToRow(row, '7', 'num7', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '8', 'num8', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '9', 'num9', 'number', handleNumberButtonClick);
-                appendButtonToRow(row, '0', 'num0', 'number', handleNumberButtonClick);
+                appendButtonToRow(row, '7', 'num7', 'number', handleButtonClick.bind(null, 7));
+                appendButtonToRow(row, '8', 'num8', 'number', handleButtonClick.bind(null, 8));
+                appendButtonToRow(row, '9', 'num9', 'number', handleButtonClick.bind(null, 9));
+                appendButtonToRow(row, '0', 'num0', 'number', handleButtonClick.bind(null, 0));
                 break;
 
         }
@@ -51,22 +55,38 @@ function add(a, b) {
     return a + b;
 }
 
-function substract(a,b) {
+function substract(a, b) {
     return a - b;
 }
 
-function multiply(a,b) {
-    return a*b;
+function multiply(a, b) {
+    return a * b;
 }
 
-function divide(a, b ){
-    return b == 0 ? NaN : a/b;
+function divide(a, b) {
+    return b == 0 ? NaN : a / b;
 }
 
-function handleNumberButtonClick() {
-    
-}
 
-function handleOperationButtonClick() {
-    
+function handleButtonClick(value) {
+    const isValid = true;
+    if ('1234567890'.includes(value)) {
+        number.push(value);
+    }
+    else if ('+-/*'.includes(value)) {
+        if (number.length != 0) {
+            expression.push(parseInt(number.join('')));
+            expression.push(value);
+            number = [];
+            console.log(expression);
+        }
+        else {
+            alert("Please enter another number before two consecutive operations.");
+            isValid = false;
+        }
+    }
+    if(isValid===true) {
+        expressionString+=value;
+        displayOperationElem.textContent = expressionString;
+    }
 }
