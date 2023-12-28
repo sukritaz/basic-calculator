@@ -7,7 +7,7 @@ let expressionString = "";
 const displayOperationElem = document.getElementById("display-operation");
 
 createNumbers();
-document.getElementById("clear").onclick = clear;
+document.getElementById("clear").onclick = handleButtonClick.bind(null,'clear');
 
 
 function createNumbers() {
@@ -84,10 +84,9 @@ function handleButtonClick(value) {
         expressionString = expressionString.slice(0, -1);
     }
 
-    displayOperationElem.textContent = expressionString;
-}
+    else if("clear"===value) {
+        expressionString = "";
+    }
 
-function clear() {
-    expressionString = "";
     displayOperationElem.textContent = expressionString;
 }
