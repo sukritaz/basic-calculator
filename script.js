@@ -63,7 +63,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return b == 0 ? NaN : a / b;
+    return b == 0 ? alert("Can not divide by 0.") : a / b;
 }
 
 
@@ -84,10 +84,12 @@ function handleButtonClick(value) {
 
     else if ("clear" === value) {
         expressionString = "";
+        document.getElementById('display-result').textContent = expressionString;
     }
 
     else if ('=' === value) {
-        evaluateExpression(expressionString);
+        expressionString === "" ? alert("Nothing to evaluate.") :
+            evaluateExpression(expressionString);
     }
 
     displayOperationElem.textContent = expressionString;
@@ -99,7 +101,7 @@ function evaluateExpression(expression) {
     }
     else {
         const expressionArray = sliceExpression(expression);
-        document.getElementById("display-result").textContent = eval(expression);
+        document.getElementById("display-result").textContent = evaluate(expressionArray);
     }
 
 }
@@ -125,4 +127,37 @@ function sliceExpression(expression) {
     }
 
     return expressionArray;
+}
+
+function evaluate(expression) {
+    if (expression.length === 1) {
+        
+    }
+    else {
+        while (expression.length != 1) {
+            let secondOperand = expression.pop();
+            let operator = expression.pop();
+            let firstOperand = expression.pop();
+
+            switch (operator) {
+                case "+":
+                    expression.push(add(firstOperand, secondOperand));
+                    break;
+                case "-":
+                    expression.push(substract(firstOperand, secondOperand));
+                    break;
+                case "*":
+                    expression.push(multiply(firstOperand, secondOperand));
+                    break;
+                case "/":
+                    expression.push(divide(firstOperand, secondOperand));
+                    break;
+                default:
+                    alert("Incorrect expression format.");
+
+            }
+        }
+    }
+    return expression[0];
+
 }
