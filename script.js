@@ -7,6 +7,7 @@ let expressionString = "";
 const displayOperationElem = document.getElementById("display-operation");
 
 createNumbers();
+document.getElementById("clear").onclick = clear;
 
 
 function createNumbers() {
@@ -23,7 +24,7 @@ function createNumbers() {
                 appendButtonToRow(row, '1', 'num1', 'number', handleButtonClick.bind(null, 1));
                 appendButtonToRow(row, '2', 'num2', 'number', handleButtonClick.bind(null, 2));
                 appendButtonToRow(row, '3', 'num3', 'number', handleButtonClick.bind(null, 3));
-                appendButtonToRow(row, 'DEL', 'del', 'operation', handleButtonClick);
+                appendButtonToRow(row, 'DEL', 'del', 'operation', handleButtonClick.bind(null, 'DEL'));
                 break;
             case 2:
                 appendButtonToRow(row, '4', 'num4', 'number', handleButtonClick.bind(null, 4));
@@ -69,24 +70,24 @@ function divide(a, b) {
 
 
 function handleButtonClick(value) {
-    const isValid = true;
+
     if ('1234567890'.includes(value)) {
-        number.push(value);
+        expressionString += value;
     }
     else if ('+-/*'.includes(value)) {
-        if (number.length != 0) {
-            expression.push(parseInt(number.join('')));
-            expression.push(value);
-            number = [];
-            console.log(expression);
-        }
-        else {
-            alert("Please enter another number before two consecutive operations.");
-            isValid = false;
-        }
+        '+-/*'.includes(expressionString.charAt(expressionString.length-1)) ?
+            alert("Please enter a number before two consecutive operations.") :
+            expressionString += value;
     }
-    if(isValid===true) {
-        expressionString+=value;
-        displayOperationElem.textContent = expressionString;
+
+    else if ("DEL" === value) {
+        expressionString = expressionString.slice(0, -1);
     }
+
+    displayOperationElem.textContent = expressionString;
+}
+
+function clear() {
+    expressionString = "";
+    displayOperationElem.textContent = expressionString;
 }
