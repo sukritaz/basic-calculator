@@ -1,0 +1,1 @@
+This is a project as a part of the open soure course called Project Odin foundation series. This requires the developer to create a calculator that can perform basic opertions such as addition, substraction, multiplication and division.
